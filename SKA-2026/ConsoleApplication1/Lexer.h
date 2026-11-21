@@ -19,7 +19,8 @@ namespace LEXER
 		enum DataTypeState {
 			NONE,    
 			INT,     
-			STR      
+			STR,
+			CHAR
 		};
 		
 		LexState state;

@@ -38,11 +38,24 @@ namespace FSTFactory
 {
 	FST::FST Integer(char* lexema);
 	FST::FST String(char* lexema);
+	FST::FST Char(char* lexema);	//доделать
+
 	FST::FST Function(char* lexema);
-	FST::FST Declare(char* lexema);
+	FST::FST Void(char* lexema);
 	FST::FST Return(char* lexema);
+
+	FST::FST If(char* lexema);
+	FST::FST Then(char* lexema);
+	FST::FST Else(char* lexema);
+	FST::FST While(char* lexema);
+	FST::FST And(char* lexema);
+	FST::FST Or(char* lexema);
+	FST::FST No(char* lexema);
+
+	FST::FST Input(char* lexema);
 	FST::FST Print(char* lexema);
 	FST::FST Main(char* lexema);
+
 	FST::FST Semicolon(char* lexema);
 	FST::FST Comma(char* lexema);
 	FST::FST Leftbrace(char* lexema);
@@ -54,6 +67,7 @@ namespace FSTFactory
 	FST::FST Minus(char* lexema);
 	FST::FST Star(char* lexema);
 	FST::FST Directslash(char* lexema);
+
 	FST::FST Integer_Literal(char* lexema);
 	FST::FST Identifier(char* lexema);
 }

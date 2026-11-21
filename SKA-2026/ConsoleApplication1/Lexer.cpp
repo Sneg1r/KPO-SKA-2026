@@ -45,7 +45,7 @@ namespace LEXER
 				continue;
 			}
 
-			//CÑ‚Ñ€Ð¾ÐºÐ°
+			//Còðîêà
 			if (ch == '\'') {
 				FlushLexema(lexema, lexemaLen, pos);
 
@@ -64,7 +64,7 @@ namespace LEXER
 				i = j;
 				continue;
 			}
-			//Ð‘ÑƒÐºÐ²Ñ‹ Ð¸ Ñ†Ð¸Ñ„Ñ€Ñ‹
+			//Áóêâû è öèôðû
 			if (lexemaLen >= TI_STR_MAXSIZE)
 				throw ERROR_THROW_IN(127, line, pos);
 
@@ -83,11 +83,24 @@ namespace LEXER
 
 		CHECK_FST_DATA(Integer, LEX_INTEGER, INT)
 		CHECK_FST_DATA(String, LEX_STRING, STR)
+		CHECK_FST_DATA(Char, LEX_STRING, CHAR)
+		
 		CHECK_FST_STATE(Function, LEX_FUNCTION, AFTER_FUNCTION)
-		CHECK_FST(Declare, LEX_DECLARE)
+		CHECK_FST(Void, LEX_VOID)
 		CHECK_FST(Return, LEX_RETURN)
+
+		CHECK_FST(If, LEX_IF)
+		CHECK_FST(Then, LEX_THEN)
+		CHECK_FST(Else, LEX_ELSE)
+		CHECK_FST(While, LEX_WHILE)
+		CHECK_FST(And, LEX_AND)
+		CHECK_FST(Or, LEX_OR)
+		CHECK_FST(No, LEX_NO)
+
+		CHECK_FST(Input, LEX_INPUT)
 		CHECK_FST(Print, LEX_PRINT)
 		CHECK_FST(Main, LEX_MAIN)
+
 		CHECK_FST(Semicolon, LEX_SEMICOLON)
 		CHECK_FST(Comma, LEX_COMMA)
 		CHECK_FST(Leftbrace, LEX_LEFTBRACE)

@@ -1,16 +1,30 @@
 #pragma once
 #define LEXEMA_FIXSIZE   1             
-#define LT_MAXSIZE       4096          
-#define LT_TI_NULLIDX    0xffffffff    
-#define LEX_INTEGER      't'           
-#define LEX_STRING       't'           
+#define LT_MAXSIZE       8192          
+#define LT_TI_NULLIDX    0xffffffff  
 #define LEX_ID           'i'           
-#define LEX_LITERAL      'l'           
-#define LEX_FUNCTION     'f'           
-#define LEX_DECLARE      'd'           
-#define LEX_RETURN       'r'           
+#define LEX_LITERAL      'l' 
+
+#define LEX_INTEGER      't'           
+#define LEX_STRING       't'      
+#define LEX_CHAR         't'
+       
+#define LEX_FUNCTION     'f'   
+#define LEX_VOID         '~'               
+#define LEX_RETURN       'r'          
+
+#define LEX_IF           '?' 
+#define LEX_THEN         '-'
+#define LEX_ELSE         ':'
+#define LEX_WHILE        'w'
+#define LEX_AND          '&'
+#define LEX_OR           '|'
+#define LEX_NO           '!'
+
+#define LEX_INPUT        'x' 
 #define LEX_PRINT        'p'           
-#define LEX_MAIN         'm'           
+#define LEX_MAIN         'm' 
+
 #define LEX_SEMICOLON    ';'           
 #define LEX_COMMA        ','           
 #define LEX_LEFTBRACE    '{'           

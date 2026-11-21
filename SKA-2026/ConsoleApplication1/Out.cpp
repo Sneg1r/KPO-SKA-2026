@@ -40,7 +40,7 @@ namespace Out
 	}
 
 	void WriteLexTable(LT::LexTable& lextable, OUT out) {
-		*out.stream << "Ð¢ÐÐ‘Ð›Ð˜Ð¦Ð Ð›Ð•ÐšÐ¡Ð•Ðœ:" << std::endl;
+		*out.stream << "ÒÀÁËÈÖÀ ËÅÊÑÅÌ:" << std::endl;
 		int lastLine = LT::GetEntry(lextable,0).sn - 1;
 
 		for (int i = 0; i < lextable.size; i++) {
@@ -56,7 +56,7 @@ namespace Out
 		*out.stream << std::endl;
 	}
 	void WriteIdentificatorTable(IT::IdTable& idTable, OUT out) {
-		*out.stream << "Ð¢ÐÐ‘Ð›Ð˜Ð¦Ð Ð˜Ð”Ð•ÐÐ¢Ð˜Ð¤Ð˜ÐšÐÐ¢ÐžÐ ÐžÐ’:" << std::endl;
+		*out.stream << "ÒÀÁËÈÖÀ ÈÄÅÍÒÈÔÈÊÀÒÎÐÎÂ:" << std::endl;
 
 		for (int i = 0; i < idTable.size; i++) {
 
@@ -95,15 +95,15 @@ namespace Out
 
 			*out.stream << e.idxfirstLE << ": " << e.id
 				<< " = '" << value << "'"
-				<< "(Ð¢Ð¸Ð¿ Ð´Ð°Ð½Ð½Ñ‹Ñ…: " << dataType 
-				<< ", Ð¢Ð¸Ð¿ Ð¸Ð´ÐµÐ½Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ‚Ð¾Ñ€Ð°: " << idType
+				<< "(Òèï äàííûõ: " << dataType 
+				<< ", Òèï èäåíòèôèêàòîðà: " << idType
 				<< ")" << std::endl;
 		}
 	}
 
 	void WriteWorkProtocol(LT::LexTable& lextable, IT::IdTable& idTable, OUT out)
 	{
-		WriteLine(out, "ÐŸÐ ÐžÐ¢ÐžÐšÐžÐ› Ð ÐÐ‘ÐžÐ¢Ð«");
+		WriteLine(out, "ÏÐÎÒÎÊÎË ÐÀÁÎÒÛ");
 		WriteLine(out, "");
 		WriteLexTable(lextable, out);
 		WriteLine(out, "");
