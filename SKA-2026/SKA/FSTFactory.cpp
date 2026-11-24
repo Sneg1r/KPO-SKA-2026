@@ -158,6 +158,45 @@ namespace FSTFactory {
 			FST::NODE()
 		);
 	}
+
+	FST::FST SetType(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION(':', 1)),
+			FST::NODE()
+		);
+	}
+	FST::FST Set(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION('=', 1)),
+			FST::NODE()
+		);
+	}
+	FST::FST Less(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION('<', 1)),
+			FST::NODE()
+		);
+	}
+
+	FST::FST More(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION('>', 1)),
+			FST::NODE()
+		);
+	}
+
 	FST::FST Input(char* lexema)
 	{
 		return FST::FST(
@@ -257,11 +296,30 @@ namespace FSTFactory {
 			FST::NODE()
 		);
 	}
-	FST::FST Equally(char* lexema)
+	FST::FST Leftsquare(char* lexema)
 	{
 		return FST::FST(
 			lexema,
 			2,
+			FST::NODE(1, FST::RELATION('[', 1)),
+			FST::NODE()
+		);
+	}
+	FST::FST Rightsquare(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION(']', 1)),
+			FST::NODE()
+		);
+	}
+	FST::FST Equally(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			3,
+			FST::NODE(1, FST::RELATION('=', 1)),
 			FST::NODE(1, FST::RELATION('=', 1)),
 			FST::NODE()
 		);
@@ -296,6 +354,15 @@ namespace FSTFactory {
 			lexema,
 			2,
 			FST::NODE(1, FST::RELATION('/', 1)),
+			FST::NODE()
+		);
+	}
+	FST::FST Residue(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			2,
+			FST::NODE(1, FST::RELATION('%', 1)),
 			FST::NODE()
 		);
 	}

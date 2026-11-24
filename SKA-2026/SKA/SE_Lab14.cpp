@@ -46,6 +46,7 @@ int wmain(int argc, wchar_t* argv[])
 		Log::WriteIn(log, in);
 
 		Out::OUT out = Out::getOut(parm.out);
+		//Out::WriteIn(out, in.redactedText);
 		Out::WriteWorkProtocol(lexer.lexTable, lexer.idTable, out);
 		Out::Close(out);
 
@@ -335,9 +336,10 @@ int wmain(int argc, wchar_t* argv[])
 //}
 //
 //int GetPriority(char ch) {
-//
-//	if (ch == '*' || ch == '/') return 3;
-//	if (ch == '+' || ch == '-') return 2;
-//	if (ch == '=') return 1;
+//	if (ch == '*' || ch == '/') return 4;
+//	if (ch == '+' || ch == '-') return 3;
+//	if (ch == 'c') return 2; // сравнение
+//	if (ch == '&' || ch == '|') return 1; // логика
+//	if (ch == '!') return 5; // унарный НЕ
 //	return 0;
 //}

@@ -7,14 +7,14 @@
 #define MFST_DIAGN_MAXSIZE 2*ERROR_MAXSIZE_MESSAGE
 #define MFST_DIAGN_NUMBER 3
 
-class MFSTSTSTACK : public std::stack<short> {        // стек автомата
+class MFSTSTSTACK : public std::stack<short> {        
 public:
 	using std::stack<short>::c;
 };
 
 namespace MFST
 {
-	struct MfstState                     // состояние автомата (для сохранения)
+	struct MfstState                     
 	{
 		short lenta_position;            // позиция на ленте
 		short nrule;                     // номер текущего правила
@@ -34,12 +34,12 @@ namespace MFST
 		);
 	};
 
-	class MFSTSTATE : public std::stack<MfstState> {  // стек автомата
+	class MFSTSTATE : public std::stack<MfstState> {  
 	public:
 		using std::stack<MfstState>::c;
 	};
 
-	struct Mfst                          // магазинный автомат
+	struct Mfst                          
 	{
 		enum RC_STEP {
 			NS_OK,                       // код возврата функции step
@@ -53,11 +53,11 @@ namespace MFST
 										 // неожиданный код возврата (ошибка в step)
 		};
 
-		struct MfstDiagnosis             // диагностика
+		struct MfstDiagnosis             
 		{
-			short lenta_position;        // позиция на ленте
+			short lenta_position;        
 			RC_STEP rc_step;             // код завершения шага
-			short nrule;                 // номер правила
+			short nrule;                
 			short nrule_chain;           // номер цепочки правила
 			MfstDiagnosis();
 			MfstDiagnosis(               // диагностика
@@ -66,7 +66,7 @@ namespace MFST
 				short pnrule,            // номер правила
 				short pnrule_chain       // номер цепочки правила
 			);
-		} diagnosis[MFST_DIAGN_NUMBER];  // последние самые глубокие сообщения
+		} diagnosis[MFST_DIAGN_NUMBER];  
 
 		GRBALPHABET* lenta;              // перекодированная (TS/NS) лента (из LEX)
 		short lenta_position;            // текущая позиция на ленте
@@ -94,8 +94,10 @@ namespace MFST
 
 		RC_STEP step();                  // выполнить шаг автомата
 		bool start();                    // запустить автомат
+		short ownerOfTop();
 		bool savediagnosis(
-			RC_STEP pprc_step            // код завершения шага
+			RC_STEP pprc_step,			 // код завершения шага
+			short pnrule            
 		);
 
 		void printrules();               // вывести последовательность правил
@@ -107,6 +109,6 @@ namespace MFST
 			short* nrulechains;          // номера цепочек правил грамматики (nrules)
 			Deduction() { size = 0; nrules = 0; nrulechains = 0; };
 		} deduction;
-		bool savededuction();            // сохранить дерево вывода
+		bool savededuction();            
 	};
 }

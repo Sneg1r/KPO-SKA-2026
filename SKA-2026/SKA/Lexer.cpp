@@ -7,70 +7,64 @@ namespace LEXER
 	{
 		lexTable = LT::Create(LT_MAXSIZE);
 		idTable = IT::Create(TI_MAXSIZE);
-
 		line = 0;
-
 		state = NORMAL;
 		dataState = NONE;
 	}
 
 	void Lexer::Processing(char* source)
 	{
-		line = 1;
-		state = LexState::NORMAL;
+		line = 1; state = LexState::NORMAL;
 
 		int size = strlen(source);
 		char lexema[TI_STR_MAXSIZE + 1]{};
-		int lexemaLen = 0;
-		int pos = 0;
+		int lexemaLen = 0; int pos = 0;
 
 		for (int i = 0; i < size; i++)
 		{
 			char ch = source[i];
 			pos++;
+			switch (ch) {
+				case ' ': case '\t': FlushLexema(lexema, lexemaLen, pos); break;
+				case '\n': case '\r':
+				{
+					FlushLexema(lexema, lexemaLen, pos);
+					pos = 0;
+					line++;
+				} break;
+				case ';': case ',': case '{': case '}': case '(': case ')':
+				case '[': case ']': case '+': case '-': case '*': case '/':
+				case '=': case ':': case '<': case '>': case '%':
+				{
+					FlushLexema(lexema, lexemaLen, pos);
+					lexema[lexemaLen++] = ch;
+					FlushLexema(lexema, lexemaLen, pos);
+				} break;
+				case '\"': {
+					FlushLexema(lexema, lexemaLen, pos);
 
-			if (ch == ' ' || ch == '\t') { FlushLexema(lexema, lexemaLen, pos); continue; }
+					int j = i + 1;
+					char strBuf[TI_STR_MAXSIZE + 1] = {};
+					int strLen = 0;
+					while (j < size && source[j] != '\"') {
 
-			if (ch == '\n' || ch == '\r') {
-				FlushLexema(lexema, lexemaLen, pos);
-				pos = 0;
-				line++;
-				continue;
+						if (strLen >= TI_STR_MAXSIZE)
+							throw ERROR_THROW_IN(151, line, pos);
+
+						strBuf[strLen++] = source[j++];
+					}
+					strBuf[strLen] = '\0';
+					AddStrLiteral(strBuf, pos);
+					i = j;
+				} break;
+				default: {
+					if (lexemaLen >= TI_STR_MAXSIZE)
+						throw ERROR_THROW_IN(127, line, pos);
+
+					lexema[lexemaLen++] = ch;
+				} break;
 			}
-
-			if (strchr(";,{}()+-*/=", ch)) {
-				FlushLexema(lexema, lexemaLen, pos);
-				lexema[lexemaLen++] = ch;
-				FlushLexema(lexema, lexemaLen, pos);
-				continue;
-			}
-
-			//Cтрока
-			if (ch == '\'') {
-				FlushLexema(lexema, lexemaLen, pos);
-
-				int j = i + 1;
-				char strBuf[TI_STR_MAXSIZE + 1] = {};
-				int strLen = 0;
-				while (j < size && source[j] != '\'') {
-
-					if (strLen >= TI_STR_MAXSIZE)
-						throw ERROR_THROW_IN(151, line, pos);
-
-					strBuf[strLen++] = source[j++];
-				}
-				strBuf[strLen] = '\0';
-				AddStrLiteral(strBuf, pos);
-				i = j;
-				continue;
-			}
-			//Буквы и цифры
-			if (lexemaLen >= TI_STR_MAXSIZE)
-				throw ERROR_THROW_IN(127, line, pos);
-
-			lexema[lexemaLen++] = ch;
 		}
-
 		if (lexemaLen > 0) {
 			lexema[lexemaLen] = '\0';
 			FindFST(lexema, pos - lexemaLen);
@@ -81,30 +75,24 @@ namespace LEXER
 	{
 		FST::FST fst = FSTFactory::Integer(lexema);
 
-		CHECK_FST_DATA(Integer, LEX_INTEGER, INT)
-		CHECK_FST_DATA(String, LEX_STRING, STR)
+		CHECK_FST_DATA(Integer, LEX_INTEGER, INT) CHECK_FST_DATA(String, LEX_STRING, STR)
 		CHECK_FST_DATA(Char, LEX_STRING, CHAR)
 		
-		CHECK_FST_STATE(Function, LEX_FUNCTION, AFTER_FUNCTION)
-		CHECK_FST(Void, LEX_VOID)
+		CHECK_FST_STATE(Function, LEX_FUNCTION, AFTER_FUNCTION) CHECK_FST(Void, LEX_VOID)
 		CHECK_FST(Return, LEX_RETURN)
 
-		CHECK_FST(If, LEX_IF)
-		CHECK_FST(Then, LEX_THEN)
-		CHECK_FST(Else, LEX_ELSE)
-		CHECK_FST(While, LEX_WHILE)
-		CHECK_FST(And, LEX_AND)
-		CHECK_FST(Or, LEX_OR)
-		CHECK_FST(No, LEX_NO)
+		CHECK_FST(If, LEX_IF)		CHECK_FST(Then, LEX_THEN)
+		CHECK_FST(Else, LEX_ELSE)	CHECK_FST(While, LEX_WHILE)
+		CHECK_FST(And, LEX_AND)		CHECK_FST(Or, LEX_OR)
+		CHECK_FST(No, LEX_NO)		CHECK_FST(SetType, LEX_SETTYPE)
+		CHECK_FST(Set, LEX_SET)
 
-		CHECK_FST(Input, LEX_INPUT)
-		CHECK_FST(Print, LEX_PRINT)
+		CHECK_FST(Input, LEX_INPUT)	CHECK_FST(Print, LEX_PRINT)
 		CHECK_FST(Main, LEX_MAIN)
 
-		CHECK_FST(Semicolon, LEX_SEMICOLON)
-		CHECK_FST(Comma, LEX_COMMA)
-		CHECK_FST(Leftbrace, LEX_LEFTBRACE)
-		CHECK_FST(Bracelet, LEX_BRACELET)
+		CHECK_FST(Semicolon, LEX_SEMICOLON)		CHECK_FST(Comma, LEX_COMMA)
+		CHECK_FST(Leftbrace, LEX_LEFTBRACE)		CHECK_FST(Bracelet, LEX_BRACELET)
+		CHECK_FST(Leftsquare, LEX_LEFTSQUARE)	CHECK_FST(Rightsquare, LEX_RIGHTSQUARE)
 
 		fst = FSTFactory::Leftthesis(lexema);
 		if (FST::execute(fst)) {
@@ -122,11 +110,12 @@ namespace LEXER
 			return;
 		}
 
-		CHECK_FST_OPERATOR(Equally, LEX_EQUALLY, (int)LEX_EQUALLY)
+		CHECK_FST(Less, LEX_LESS)	CHECK_FST(More, LEX_MORE)	CHECK_FST(Equally, LEX_EQUALLY)
 		CHECK_FST_OPERATOR(Plus, LEX_PLUS, (int)LEX_PLUS)
 		CHECK_FST_OPERATOR(Minus, LEX_MINUS, (int)LEX_MINUS)
 		CHECK_FST_OPERATOR(Star, LEX_STAR, (int)LEX_STAR)
 		CHECK_FST_OPERATOR(Directslash, LEX_DIRSLASH, (int)LEX_DIRSLASH)
+		CHECK_FST_OPERATOR(Residue, LEX_RESIDUE, (int)LEX_RESIDUE)
 
 		fst = FSTFactory::Integer_Literal(lexema);
 		if (FST::execute(fst)) {

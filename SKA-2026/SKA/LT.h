@@ -11,17 +11,19 @@
        
 #define LEX_FUNCTION     'f'   
 #define LEX_VOID         '~'               
-#define LEX_RETURN       'r'          
+#define LEX_RETURN       'r' 
 
 #define LEX_IF           '?' 
-#define LEX_THEN         '-'
-#define LEX_ELSE         ':'
+#define LEX_THEN         '>'
+#define LEX_ELSE         '<'
 #define LEX_WHILE        'w'
 #define LEX_AND          '&'
 #define LEX_OR           '|'
 #define LEX_NO           '!'
+#define LEX_SETTYPE      ':'
+#define LEX_SET          '='
 
-#define LEX_INPUT        'x' 
+#define LEX_INPUT        '#' 
 #define LEX_PRINT        'p'           
 #define LEX_MAIN         'm' 
 
@@ -30,20 +32,27 @@
 #define LEX_LEFTBRACE    '{'           
 #define LEX_BRACELET     '}'           
 #define LEX_LEFTHESIS    '('           
-#define LEX_RIGHTHESIS   ')'           
-#define LEX_EQUALLY      '='           
+#define LEX_RIGHTHESIS   ')'  
+#define LEX_LEFTSQUARE   '['           
+#define LEX_RIGHTSQUARE  ']' 
+          
+#define LEX_LESS         'c' 
+#define LEX_MORE         'c' 
+#define LEX_EQUALLY      'c' 
 #define LEX_PLUS         'v'           
 #define LEX_MINUS        'v'           
 #define LEX_STAR         'v'           
 #define LEX_DIRSLASH     'v'           
+#define LEX_RESIDUE      'v'  
 
-namespace LT      
+namespace LT      //расширить позицию 
 {
     struct Entry  
     {
         char lexema[LEXEMA_FIXSIZE]{}; 
         int sn;                        
-        int idxTI;                     
+        int idxTI;     
+
     };
 
     struct LexTable                    

@@ -29,27 +29,26 @@ namespace In {
 		unsigned char ch;
 		int pos = 0;
 
-		while (fin.get(reinterpret_cast<char&>(ch))) {
+		while (fin.get(reinterpret_cast<char&>(ch))) { // switch
 			pos++;
-			if (newIn.code[ch] == newIn.T) {   
-				newIn.text[newIn.size] = ch;
-				newIn.size++;
-			}
 
-			else if (newIn.code[ch] == newIn.F)	
-				throw ERROR_THROW_IN(111, newIn.lines, pos)
+			switch (newIn.code[ch]) {
+				case newIn.T: 
+				{
+					newIn.text[newIn.size] = ch;
+					newIn.size++;
 
-			else if (newIn.code[ch] == newIn.I)	
-					newIn.ignor++;
-
-			if (ch == IN_CODE_ENDL || ch == '\r') {	
-				newIn.lines++;
-				pos = 0;
+					if (ch == IN_CODE_ENDL || ch == '\r') {
+						newIn.lines++;
+						pos = 0;
+					}
+				} break;
+				case newIn.F: throw ERROR_THROW_IN(111, newIn.lines, pos) break;
+				case newIn.I:newIn.ignor++; break;
 			}
 		}
 
 		fin.close();
-
 		return newIn;
 	}
 
