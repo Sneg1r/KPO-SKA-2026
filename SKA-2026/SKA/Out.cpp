@@ -79,9 +79,21 @@ namespace Out
 					value[len] = '\0';
 				}
 				break;
+			case IT::IDDATATYPE::CHAR:
+				dataType = "CHAR";
+				{
+					sprintf_s(value, 256, "%c", e.value.vchar);
+				}
+				break;
+			case IT::IDDATATYPE::VOID:
+				dataType = "VOID";
+				{
+					sprintf_s(value, 256, " ");
+				}
+				break;
 			default:
-				dataType = "UNKNOWN";
-				sprintf_s(value, 256, "?");
+				dataType = "NONE";
+				sprintf_s(value, 256, " ");
 				break;
 			}
 

@@ -25,62 +25,174 @@ namespace In {
 
 		if (!fin.is_open())
 			throw ERROR_THROW(110);
-		
+
 		unsigned char ch;
 		int pos = 0;
 
-		while (fin.get(reinterpret_cast<char&>(ch))) { // switch
+		while (fin.get(reinterpret_cast<char&>(ch))) {
 			pos++;
 
 			switch (newIn.code[ch]) {
-				case newIn.T: 
-				{
-					newIn.text[newIn.size] = ch;
-					newIn.size++;
+			case newIn.T:
+			{
+				newIn.text[newIn.size] = ch;
+				newIn.size++;
 
-					if (ch == IN_CODE_ENDL || ch == '\r') {
-						newIn.lines++;
-						pos = 0;
-					}
-				} break;
-				case newIn.F: throw ERROR_THROW_IN(111, newIn.lines, pos) break;
-				case newIn.I:newIn.ignor++; break;
+				if (ch == IN_CODE_ENDL || ch == '\r') {
+					newIn.lines++;
+					pos = 0;
+				}
+
+				if (!strchr(IN_TAB_CHARACTERS, ch)) newIn.symbols++;
+
+			} break;
+			case newIn.F: throw ERROR_THROW_IN(111, newIn.lines, pos) break;
+			case newIn.I:newIn.ignor++; break;
 			}
 		}
+
+		newIn.posSimbols = new int[newIn.symbols] {};
+		ProcessingText(newIn);
+
+		/*for (int i = 0; i < newIn.symbols; i++)
+		{
+			cout << i << "   " << newIn.posSimbols[i] << endl;
+		}*/
 
 		fin.close();
 		return newIn;
 	}
 
-	void ProcessingText(IN &in) {
+	void ProcessingText(IN& in) {
 		int size = strlen(in.text); int position = 0;
-		in.redactedText = new char[size] {}; in.redactedText[0] = '\r';
+		in.redactedText = new char[size * 2 + 2] {}; in.redactedText[0] = '\r';
 		char lastSimbol;
 
-		for (int i = 0; i < size; i++) 
-		{
+		int currWord = 0;
+		int linePos = 1;
+		bool isWord = false;
+		bool inString = false;
+		bool inLineComment = false;
+		bool inBlockComment = false;
+
+		for (int i = 0; i < size; i++) {
 			char c = in.text[i];
 
-			if ((c == ' ' || c == '\n') && in.redactedText[0] == '\r')
+			if (inLineComment) {
+				if (c == IN_CODE_ENDL) {
+					inLineComment = false;
+					linePos = 1;
+					in.redactedText[position++] = IN_CODE_ENDL;
+				}
 				continue;
+			}
 
-			if (i > 0)
-			{
-				if (c == ' ' || c == '\n')
-				{
-					if (lastSimbol == c) continue;
+			if (inBlockComment) {
+				if (c == '*' && i+1 < size && in.text[i+1] == '/') {
+					inBlockComment = false;
+					linePos++;
+					i++;
+
+				}
+				else if (c == IN_CODE_ENDL) {
+					linePos = 1;
+					in.redactedText[position++] = IN_CODE_ENDL;
+				}
+				linePos++;
+				continue;
+			}
+
+			if (c == '/' && i + 1 < size) {
+				if (in.text[i + 1] == '/') {
+					inLineComment = true;
+					i++;
+					linePos += 2;
+					continue;
+				}
+				if (in.text[i + 1] == '*') {
+					inBlockComment = true;
+					i++;
+					linePos += 2;
+					continue;
 				}
 			}
 
-			if (c == '\n')
-			{
-				in.redactedText[position++] = SEPARATOR;
-				lastSimbol = in.text[i];
+			if (c == IN_CODE_ENDL || c == '\r') {
+				if (isWord) {
+					isWord = false;
+				}
+				in.redactedText[position++] = IN_CODE_ENDL;
+				linePos = 1; 
 				continue;
 			}
 
+			if (inString) {
+				if (c == '"') {
+					inString = false;
+					in.redactedText[position++] = c;
+					in.redactedText[position++] = SEPARATOR;
+				}
+				else {
+					in.redactedText[position++] = c;
+				}
+				linePos++;
+				continue;
+			}
+
+			if (c == '"') {
+				if (isWord) {
+					isWord = false;
+					in.redactedText[position++] = SEPARATOR;
+				}
+				inString = true;
+				in.posSimbols[currWord] = linePos;
+				currWord++;
+				in.redactedText[position++] = c;
+				linePos++;
+				continue;
+			}
+
+			if (c == ' ' || c == '\t') {
+				if (isWord) {
+					isWord = false;
+					in.redactedText[position++] = SEPARATOR;
+				}
+				linePos++;
+				continue;
+			}
+
+			if (IsSeparator(c)) {
+				if (isWord) {
+					isWord = false;
+					in.redactedText[position++] = SEPARATOR;
+				}
+
+				in.posSimbols[currWord] = linePos;
+				currWord++;
+
+				in.redactedText[position++] = c;
+				in.redactedText[position++] = SEPARATOR;
+				linePos++;
+				continue;
+			}
+
+			if (!isWord) {
+				isWord = true;
+				in.posSimbols[currWord] = linePos;
+				currWord++;
+			}
+
 			in.redactedText[position++] = c;
-			lastSimbol = in.text[i];
+			linePos++;
 		}
+
+		if (isWord) {
+			in.redactedText[position++] = SEPARATOR;
+		}
+		in.redactedText[position] = '\0';
+	}
+
+	bool IsSeparator(char ch) {
+		return strchr("(){}[],:;+-/%<>=", ch);
 	}
 }

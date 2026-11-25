@@ -20,7 +20,7 @@ if (FST::execute(fst)) {						\
     fst = FSTFactory::FACTORY(lexema);             \
     if (FST::execute(fst)) {                       \
         AddLexema(TOKEN, line, LT_TI_NULLIDX);     \
-        dataState = TYPE;                          \
+        SetTypeLastIT(TYPE);			           \
         return;                                     \
     }
 
@@ -57,6 +57,11 @@ namespace FSTFactory
 	FST::FST Input(char* lexema);
 	FST::FST Print(char* lexema);
 	FST::FST Main(char* lexema);
+	FST::FST True(char* lexema);
+	FST::FST False(char* lexema);
+
+	FST::FST From(char* lexema);
+	FST::FST To(char* lexema);
 
 	FST::FST Semicolon(char* lexema);
 	FST::FST Comma(char* lexema);

@@ -40,16 +40,18 @@ int wmain(int argc, wchar_t* argv[])
 		In::IN in = In::getin(parm.in);
 
 		LEXER::Lexer lexer;
-		lexer.Processing(in.text);
+		lexer.Processing(in);
 
 		In::ProcessingText(in);
 		Log::WriteIn(log, in);
 
 		Out::OUT out = Out::getOut(parm.out);
-		//Out::WriteIn(out, in.redactedText);
+		Out::OUT outClearText = Out::getOut((wchar_t*)"clear.txt");
+		Out::WriteIn(outClearText, in.redactedText);
 		Out::WriteWorkProtocol(lexer.lexTable, lexer.idTable, out);
-		Out::Close(out);
 
+		Out::Close(outClearText);
+		Out::Close(out);
 		Log::Close(log);
 
 		MFST_TRACE_START

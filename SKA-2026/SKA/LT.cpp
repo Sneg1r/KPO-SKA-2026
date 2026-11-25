@@ -23,7 +23,7 @@ namespace LT
 		lextable.table[lextable.size++] = entry;
 	}
 
-	Entry GetEntry(LexTable& lextable, int n)
+	Entry& GetEntry(LexTable& lextable, int n)
 	{
 		if (lextable.table == nullptr) throw ERROR_THROW(131);
 		if (n < 0 || n > lextable.size) throw ERROR_THROW(132);

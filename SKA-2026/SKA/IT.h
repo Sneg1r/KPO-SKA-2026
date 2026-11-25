@@ -10,7 +10,7 @@
 
 namespace IT
 {
-	enum IDDATATYPE { INT = 1, STR = 2 };
+	enum IDDATATYPE { NONE = 0, INT = 1, STR = 2, CHAR = 3, VOID = 4};
 	enum IDTYPE { V = 1, F = 2, P = 3, L = 4 };
 
 	struct Entry
@@ -23,6 +23,7 @@ namespace IT
 		union
 		{
 			int vint;
+			char vchar;
 			struct
 			{
 				unsigned char len;
@@ -40,7 +41,7 @@ namespace IT
 
 	IdTable Create(int size);
 	void Add(IdTable& idtable,Entry entry);
-	Entry GetEntry(IdTable& idtable,int n);
+	Entry& GetEntry(IdTable& idtable,int n);
 	int IsId(IdTable& idtable,char id[ID_MAXSIZE]);
 	void Delete(IdTable& idtable);
 };

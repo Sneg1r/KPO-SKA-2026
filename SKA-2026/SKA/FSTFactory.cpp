@@ -244,6 +244,52 @@ namespace FSTFactory {
 		);
 
 	}
+	FST::FST True(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			7,
+			FST::NODE(1, FST::RELATION('ï', 1)), // 0
+			FST::NODE(1, FST::RELATION('ð', 2)), // 1
+			FST::NODE(1, FST::RELATION('à', 3)), // 2
+			FST::NODE(1, FST::RELATION('â', 4)), // 3
+			FST::NODE(1, FST::RELATION('ä', 5)), // 4
+			FST::NODE(1, FST::RELATION('à', 6)), // 5
+			FST::NODE()                          // 6
+		);
+	}
+	FST::FST False(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			5,
+			FST::NODE(1, FST::RELATION('ë', 1)), // 0
+			FST::NODE(1, FST::RELATION('î', 2)), // 1
+			FST::NODE(1, FST::RELATION('æ', 3)), // 2
+			FST::NODE(1, FST::RELATION('ü', 4)), // 3
+			FST::NODE()                          // 4
+		);
+	}
+	FST::FST From(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			3,
+			FST::NODE(1, FST::RELATION('î', 1)), // 0
+			FST::NODE(1, FST::RELATION('ò', 2)), // 1
+			FST::NODE()                          // 2
+		);
+	}
+	FST::FST To(char* lexema)
+	{
+		return FST::FST(
+			lexema,
+			3,
+			FST::NODE(1, FST::RELATION('ä', 1)), // 0
+			FST::NODE(1, FST::RELATION('î', 2)), // 1
+			FST::NODE()                          // 2
+		);
+	}
 	FST::FST Semicolon(char* lexema) {
 		return FST::FST(
 			lexema,
@@ -320,7 +366,7 @@ namespace FSTFactory {
 			lexema,
 			3,
 			FST::NODE(1, FST::RELATION('=', 1)),
-			FST::NODE(1, FST::RELATION('=', 1)),
+			FST::NODE(1, FST::RELATION('=', 2)),
 			FST::NODE()
 		);
 	}

@@ -26,6 +26,10 @@
 #define LEX_INPUT        '#' 
 #define LEX_PRINT        'p'           
 #define LEX_MAIN         'm' 
+#define LEX_TRUE         'l'
+#define LEX_FALSE        'l'
+#define LEX_FROM         '^'
+#define LEX_TO           '%'
 
 #define LEX_SEMICOLON    ';'           
 #define LEX_COMMA        ','           
@@ -64,6 +68,6 @@ namespace LT      //расширить позицию
 
     LexTable Create(int size);
     void Add(LexTable& lextable, Entry entry);
-    Entry GetEntry(LexTable& lextable, int n);
+    Entry& GetEntry(LexTable& lextable, int n);
     void Delete(LexTable& lextable);   
 };

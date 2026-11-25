@@ -22,7 +22,7 @@ namespace IT
 		idtable.table[idtable.size++] = entry;
 	}
 
-	Entry GetEntry(IdTable &idtable, int n)
+	Entry& GetEntry(IdTable &idtable, int n)
 	{
 		if (idtable.table == nullptr) throw ERROR_THROW(141);
 		if (n < 0 || n >= idtable.size) throw ERROR_THROW(142);
